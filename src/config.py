@@ -23,6 +23,10 @@ class Config:
     rule: str = AvailabilityRule.ANY_OPEN
     verbose: bool = False
     slack_webhook_url: Optional[str] = None
+    slack_bot_token: Optional[str] = None
+    slack_dm_user_id: Optional[str] = None
+    slack_channel: Optional[str] = None
+    slack_test: bool = False
 
 
 def load_config(
@@ -32,6 +36,10 @@ def load_config(
     rule: Optional[str] = None,
     verbose: bool = False,
     slack_webhook: Optional[str] = None,
+    slack_bot_token: Optional[str] = None,
+    slack_dm_user_id: Optional[str] = None,
+    slack_channel: Optional[str] = None,
+    slack_test: bool = False,
 ) -> Config:
     """Load config from env vars with overrides from CLI."""
     return Config(
@@ -41,6 +49,10 @@ def load_config(
         rule=rule or os.environ.get("SOC_RULE", AvailabilityRule.ANY_OPEN),
         verbose=verbose or os.environ.get("SOC_VERBOSE", "").lower() in ("1", "true", "yes"),
         slack_webhook_url=slack_webhook or os.environ.get("SOC_SLACK_WEBHOOK") or None,
+        slack_bot_token=slack_bot_token or os.environ.get("SOC_SLACK_BOT_TOKEN") or None,
+        slack_dm_user_id=slack_dm_user_id or os.environ.get("SOC_SLACK_DM_USER_ID") or None,
+        slack_channel=slack_channel or os.environ.get("SOC_SLACK_CHANNEL") or None,
+        slack_test=slack_test or os.environ.get("SOC_SLACK_TEST", "").lower() in ("1", "true", "yes"),
     )
 
 

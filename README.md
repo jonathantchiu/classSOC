@@ -26,8 +26,11 @@ soc-watch --url "..." --once
 # Verbose logging
 soc-watch --url "..." --verbose
 
-# Slack notifications on availability changes
+# Slack notifications on availability changes (webhook)
 soc-watch --url "..." --slack-webhook "https://hooks.slack.com/services/..."
+
+# Slack Bot DM (direct message to a user)
+soc-watch --url "..." --slack-bot-token xoxb-... --slack-dm-user U0xxxxx
 ```
 
 ## Environment Variables
@@ -37,6 +40,8 @@ soc-watch --url "..." --slack-webhook "https://hooks.slack.com/services/..."
 - `SOC_RULE` — `any_open`, `lecture_and_discussion`, or `specific_sections`
 - `SOC_SECTIONS` — Comma-separated section IDs for `specific_sections` rule (e.g. `Lec 1,Dis 1A`)
 - `SOC_SLACK_WEBHOOK` — Slack Incoming Webhook URL for notifications on availability changes
+- `SOC_SLACK_BOT_TOKEN` — Slack Bot User OAuth Token (xoxb-...) for DM notifications
+- `SOC_SLACK_DM_USER_ID` — Slack User ID (U0xxxxx) to receive DM notifications
 
 ## Availability Rules
 

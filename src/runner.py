@@ -8,7 +8,7 @@ from .config import Config
 from .detector import detect
 from .fetcher import fetch_html
 from .models import Snapshot
-from .notifier import ConsoleNotifier, SlackNotifier
+from .notifier import ConsoleNotifier, SlackBotNotifier, SlackNotifier
 from .parser import parse
 from .state import load_last_snapshot, save_snapshot
 
@@ -39,11 +39,28 @@ def run_once(config: Config, url: Optional[str] = None) -> bool:
     events = detect(prev, snapshot, config, url=target_url)
 
     notifiers = [ConsoleNotifier()]
+    slack_notifiers = []
     if config.slack_webhook_url:
-        notifiers.append(SlackNotifier(config.slack_webhook_url))
+        n = SlackNotifier(config.slack_webhook_url)
+        notifiers.append(n)
+        slack_notifiers.append(n)
+    if config.slack_bot_token and config.slack_dm_user_id:
+        n = SlackBotNotifier(
+            config.slack_bot_token,
+            config.slack_dm_user_id,
+            channel=config.slack_channel,
+        )
+        notifiers.append(n)
+        slack_notifiers.append(n)
+
     for event in events:
         for notifier in notifiers:
             notifier.notify(event)
+
+    # Always send status to Slack on every poll (even when closed)
+    if slack_notifiers:
+        for n in slack_notifiers:
+            n.notify_status(snapshot, target_url)
 
     # Log status line
     if config.verbose:

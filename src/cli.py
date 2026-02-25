@@ -1,6 +1,11 @@
 """CLI entrypoint: soc-watch."""
 
 import argparse
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import logging
 import sys
 
@@ -49,6 +54,23 @@ def main() -> None:
         "--slack-webhook",
         help="Slack Incoming Webhook URL for notifications on availability changes",
     )
+    parser.add_argument(
+        "--slack-bot-token",
+        help="Slack Bot User OAuth Token (xoxb-...) for DM notifications",
+    )
+    parser.add_argument(
+        "--slack-dm-user",
+        help="Slack User ID (U0xxxxx) to receive DM notifications",
+    )
+    parser.add_argument(
+        "--slack-channel",
+        help="Slack channel (e.g. #general) to post to instead of DM; pings --slack-dm-user",
+    )
+    parser.add_argument(
+        "--slack-test",
+        action="store_true",
+        help="Send Slack message on every check (for testing)",
+    )
 
     args = parser.parse_args()
     sections = [s.strip() for s in args.sections.split(",")] if args.sections else None
@@ -63,6 +85,10 @@ def main() -> None:
         rule=args.rule,
         verbose=args.verbose,
         slack_webhook=args.slack_webhook,
+        slack_bot_token=args.slack_bot_token,
+        slack_dm_user_id=args.slack_dm_user,
+        slack_channel=args.slack_channel,
+        slack_test=args.slack_test,
     )
 
     try:
