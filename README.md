@@ -1,5 +1,7 @@
 # UCLA SOC Availability Watcher
 
+> **Note:** This repo is outdated. For the latest version and the standalone Slack notifier package, see [classSOC-v2](https://github.com/jonathantchiu/classSOC-v2).
+
 A lightweight polling system that monitors UCLA Schedule of Classes (SOC) course pages and notifies you when a class transitions from full/closed to available/open.
 
 ## Install
